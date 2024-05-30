@@ -10,3 +10,7 @@ h1 {
     padding: 0px;
     margin: 0px;
 }
+
+#hexrep {
+    font-family: monospace;
+}

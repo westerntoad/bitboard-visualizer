@@ -1,5 +1,6 @@
 let size;
 let canvas;
+let hexrep;
 let ctx;
 let darkSquareCol;
 let lightSquareCol;
@@ -9,6 +10,7 @@ let array;
 function init() {
     size = Math.min(window.innerWidth, window.innerHeight) / 1.2;
     canvas = document.getElementById("board");
+    hexrep = document.getElementById("hexrep");
     ctx = canvas.getContext("2d");
     darkSquareCol = "#B38763";
     lightSquareCol = "#EFD8B3";
@@ -23,6 +25,7 @@ function init() {
     }
 
     resizeCanvas();
+    update();
     canvas.addEventListener("click", clickBoard);
 }
 
@@ -43,6 +46,8 @@ function resizeCanvas() {
 function draw() {
     let squareSize = size / 8;
 
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = "3";
     for (let i = 0; i < 64; i++) {
         ctx.fillStyle = i % 2 == 0 && i % 16 >= 8
                      || i % 2 == 1 && i % 16 < 8
@@ -58,13 +63,9 @@ function draw() {
 
             ctx.beginPath();
             ctx.arc(x - (squareSize / 2), y - (squareSize / 2), squareSize / 2 - 3, 0, 2 * Math.PI);
-            ctx.strokeStyle = "red";
-            ctx.lineWidth = "3";
             ctx.stroke();
         }
     }
-    //ctx.fillRect(0, 0, squareSize, squareSize);
-    //ctx.fillRect(squareSize, squareSize, squareSize, squareSize);
 }
 
 function clickBoard(e) {
@@ -74,10 +75,24 @@ function clickBoard(e) {
 
     let col = Math.floor(cursorX / squareSize);
     let row = Math.floor(cursorY / squareSize);
-    console.log("col =", col);
-    console.log("row =", row);
     array[row][col] = !array[row][col];
+    update();
     draw();
+}
+
+function update() {
+    num = 0n
+
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+            if (array[7 - i][j]) {
+                num += BigInt(2**(i * 8 + j));
+            }
+        }
+    }
+
+    console.log(num);
+    hexrep.value = "0x" + num.toString(16).padStart(16, "0");
 }
 
 window.onload = init;
