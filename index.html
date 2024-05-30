@@ -11,7 +11,26 @@
     <canvas id="board"></canvas>
     <div>
         <label for="hexrep"> Hexadecimal Representation </label><br>
-        <input type="text" id="hexrep" name="hexrep">
+        <input type="text" id="hexrep" name="hexrep"/>
+    </div>
+    <div>
+        <legend>Square Mapping Order and Endianness</legend>
+        <div>
+            <input type="radio" id="lerfMapChoice" name="mapping" checked="checked"/>
+            <label for="lerfMapChoice">Little-Endian Rank-File Mapping</label>
+            <br>
+
+            <input type="radio" id="lefrMapChoice" name="mapping"/>
+            <label for="lefrMapChoice">Little-Endian File-Rank Mapping</label>
+            <br>
+
+            <input type="radio" id="berfMapChoice" name="mapping", disabled/>
+            <label for="berfMapChoice">Big-Endian Rank-File Mapping (WIP)</label>
+            <br>
+
+            <input type="radio" id="befrMapChoice" name="mapping" disabled/>
+            <label for="befrMapChoice">Big-Endian File-Rank Mapping (WIP)</label>
+        </div>
     </div>
 </div>
 </html>

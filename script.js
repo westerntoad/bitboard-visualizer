@@ -1,20 +1,32 @@
 let size;
 let canvas;
 let hexrep;
+let lerfChoice;
+let lefrChoice;
 let ctx;
 let darkSquareCol;
 let lightSquareCol;
 let squareSize;
 let array;
+let mappingSchema;
 
 function init() {
     size = Math.min(window.innerWidth, window.innerHeight) / 1.2;
     canvas = document.getElementById("board");
     hexrep = document.getElementById("hexrep");
+    lerfChoice = document.getElementById("lerfMapChoice");
+    lefrChoice = document.getElementById("lefrMapChoice");
     ctx = canvas.getContext("2d");
     darkSquareCol = "#B38763";
     lightSquareCol = "#EFD8B3";
     squareSize = size / 8;
+
+    // overly-verbose chessboard mapping schema collapsed into:
+    // Little-Endian Rank-File Mapping -> LERF
+    // Little-Endian File-Rank Mapping -> LEFR
+    // Big-Endian Rank-File Mapping -> BERF
+    // Big-Endian File-Rank Mapping -> BEFR
+    mappingSchema = "LERF";
 
     array = new Array(8);
     for (var i = 0; i < 8; i++) {
@@ -26,7 +38,16 @@ function init() {
 
     resizeCanvas();
     update();
+    
     canvas.addEventListener("click", clickBoard);
+    lerfChoice.onclick = (e) => {
+        mappingSchema = "LERF"
+        update();
+    };
+    lefrChoice.onclick = (e) => {
+        mappingSchema = "LEFR"
+        update();
+    };
 }
 
 function resizeCanvas() {
@@ -81,7 +102,18 @@ function clickBoard(e) {
 }
 
 function update() {
-    num = 0n
+    num = 0;
+    switch (mappingSchema) {
+        case "LERF":
+            num = littleEndianRankFile();
+        case "LEFR":
+            num = littleEndianFileRank();
+    }
+    hexrep.value = "0x" + num.toString(16).padStart(16, "0");
+}
+
+function littleEndianRankFile() {
+    num = 0n;
 
     for (var i = 0; i < 8; i++) {
         for (var j = 0; j < 8; j++) {
@@ -91,8 +123,21 @@ function update() {
         }
     }
 
-    console.log(num);
-    hexrep.value = "0x" + num.toString(16).padStart(16, "0");
+    return num;
+}
+
+function littleEndianFileRank() {
+    num = 0n;
+
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+            if (array[7 - j][i]) {
+                num += BigInt(2**(i * 8 + j));
+            }
+        }
+    }
+
+    return num;
 }
 
 window.onload = init;
