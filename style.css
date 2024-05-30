@@ -2,9 +2,11 @@ h1 {
     text-align: center;
 }
 
+#main {
+    display: flex;
+}
+
 #board {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid black;
+    padding: 0px;
+    margin: 0px;
 }
