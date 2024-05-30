@@ -7,8 +7,10 @@ let ctx;
 let darkSquareCol;
 let lightSquareCol;
 let squareSize;
-let array;
 let mappingSchema;
+let mouseIsDown;
+let isHighlighting;
+let array;
 
 function init() {
     size = Math.min(window.innerWidth, window.innerHeight) / 1.2;
@@ -20,13 +22,13 @@ function init() {
     darkSquareCol = "#B38763";
     lightSquareCol = "#EFD8B3";
     squareSize = size / 8;
-
     // overly-verbose chessboard mapping schema collapsed into:
     // Little-Endian Rank-File Mapping -> LERF
     // Little-Endian File-Rank Mapping -> LEFR
     // Big-Endian Rank-File Mapping -> BERF
     // Big-Endian File-Rank Mapping -> BEFR
     mappingSchema = "LERF";
+    mouseIsDown = false;
 
     array = new Array(8);
     for (var i = 0; i < 8; i++) {
@@ -39,7 +41,28 @@ function init() {
     resizeCanvas();
     update();
     
-    canvas.addEventListener("click", clickBoard);
+    canvas.onmousedown = (e) => {
+        mouseIsDown = true;
+        
+        vals = getRowCol(e);
+        let [row, col] = vals;
+        isHighlighting = array[row][col];
+        array[row][col] = !isHighlighting;
+        draw();
+    };
+    canvas.onmouseup = (e) => {
+        mouseIsDown = false;
+        update();
+    };
+    canvas.onmousemove = (e) => {
+        if (!mouseIsDown) return;
+
+        vals = getRowCol(e);
+        let [row, col] = vals;
+        array[row][col] = !isHighlighting;
+        
+        draw();
+    };
     lerfChoice.onclick = (e) => {
         mappingSchema = "LERF"
         update();
@@ -89,16 +112,15 @@ function draw() {
     }
 }
 
-function clickBoard(e) {
+function getRowCol(e) {
     let bounds = canvas.getBoundingClientRect();
     let cursorX = e.clientX - bounds.left;
     let cursorY = e.clientY - bounds.top;
 
     let col = Math.floor(cursorX / squareSize);
     let row = Math.floor(cursorY / squareSize);
-    array[row][col] = !array[row][col];
-    update();
-    draw();
+
+    return [row, col];
 }
 
 function update() {
