@@ -2,8 +2,24 @@ h1 {
     text-align: center;
 }
 
+#board-wrapper {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: stretch;
+}
+
 #main {
     display: flex;
+}
+
+#board-wrapper {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: stretch;
+}
+
+.flex-break {
+    flex-basis: 100%;
 }
 
 #board {

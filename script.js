@@ -13,7 +13,7 @@ let isHighlighting;
 let array;
 
 function init() {
-    size = Math.min(window.innerWidth, window.innerHeight) / 1.2;
+    size = Math.min(window.innerWidth, window.innerHeight) / 1.4;
     canvas = document.getElementById("board");
     hexrep = document.getElementById("hexrep");
     lerfChoice = document.getElementById("lerfMapChoice");
@@ -54,6 +54,10 @@ function init() {
         mouseIsDown = false;
         update();
     };
+    canvas.onmouseleave = (e) => {
+        mouseIsDown = false;
+        update();
+    }
     canvas.onmousemove = (e) => {
         if (!mouseIsDown) return;
 
@@ -74,7 +78,8 @@ function init() {
 }
 
 function resizeCanvas() {
-    size = Math.min(window.innerWidth, window.innerHeight) / 1.2;
+    size = Math.min(window.innerWidth, window.innerHeight) / 1.35;
+    squareSize = size / 8;
     let pixelRatio = window.devicePixelRatio;
 
     // Set display size (css pixels).
@@ -84,6 +89,7 @@ function resizeCanvas() {
     canvas.width = Math.floor(size * devicePixelRatio);
     canvas.height = Math.floor(size * devicePixelRatio);
     ctx.scale(pixelRatio, pixelRatio);
+
     draw();
 }
 
