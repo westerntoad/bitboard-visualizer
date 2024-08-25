@@ -44,8 +44,7 @@ function init() {
     canvas.onmousedown = (e) => {
         mouseIsDown = true;
         
-        vals = getRowCol(e);
-        let [row, col] = vals;
+        let [row, col] = getRowCol(e);
         isHighlighting = array[row][col];
         array[row][col] = !isHighlighting;
         draw();
@@ -57,7 +56,7 @@ function init() {
     canvas.onmouseleave = (e) => {
         mouseIsDown = false;
         update();
-    }
+    };
     canvas.onmousemove = (e) => {
         if (!mouseIsDown) return;
 
@@ -67,6 +66,14 @@ function init() {
         
         draw();
     };
+    
+    hexrep.onkeyup = (e) => {
+        if (e.key == "Enter") {
+            
+        }
+    };
+
+
     lerfChoice.onclick = (e) => {
         mappingSchema = "LERF"
         update();
@@ -134,10 +141,22 @@ function update() {
     switch (mappingSchema) {
         case "LERF":
             num = littleEndianRankFile();
+            break;
         case "LEFR":
             num = littleEndianFileRank();
+            break;
     }
     hexrep.value = "0x" + num.toString(16).padStart(16, "0");
+}
+
+function changeArray(hexVal) {
+    
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+            
+        }
+    }
+
 }
 
 function littleEndianRankFile() {
@@ -151,6 +170,7 @@ function littleEndianRankFile() {
         }
     }
 
+    console.log(num);
     return num;
 }
 
